@@ -7,6 +7,8 @@ CC_LIBS:=-lm
 
 SOURCE_FILES:=$(wildcard src/*.c)
 HEADER_FILES:=$(wildcard src/*.h)
+INTERNAL_HEADER_FILES:=$(wildcard src/*.internal.h)
+PUBLIC_HEADER_FILES:=$(filter-out $(INTERNAL_HEADER_FILES), $(HEADER_FILES))
 OBJ_FILES:=$(addsuffix .o, $(patsubst src/%,build/%,$(SOURCE_FILES)))
 
 # App data
@@ -27,10 +29,11 @@ clean:
 	@rm -rf lib bin include build 2>/dev/null
 
 install: all
+	@echo $(PUBLIC_HEADER_FILES)
 	@echo "Installing to $(IDIR)"
 	@echo "Installing headers to $(IDIR)/$(APP_NAME)"
 	@cp lib/$(APP_NAME).a $(IDIR)/$(APP_NAME).a
-	@cp src/*.h $(IDIR)/include/$(APP_NAME)/
+	@cp $(PUBLIC_HEADER_FILES) $(IDIR)/include/$(APP_NAME)/
 
 uninstall:
 	@echo "Deleting installation: $(IDIR)/$(APP_NAME).a"
@@ -42,7 +45,7 @@ uninstall:
 #
 includes: $(HEADER_FILES)
 	@echo "Copying header files to ./include"
-	@cp src/*.h include/
+	@cp $(PUBLIC_HEADER_FILES) include/
 
 app: $(OBJ_FILES)
 	@echo "Building bin/$(APP_NAME).a"
