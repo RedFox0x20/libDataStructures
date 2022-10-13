@@ -10,7 +10,7 @@
 
 #ifndef DS_BYTEBUFFER_INTERNAL_H
 
-typedef void* DS_ByteBuffer_t;
+typedef void DS_ByteBuffer_t;
 
 #endif /* DS_BYTEBUFFER_INTERNAL_H */
 
@@ -62,5 +62,12 @@ unsigned char* DS_ByteBuffer_GetData(
  */
 unsigned int DS_ByteBuffer_GetLength(
         DS_ByteBuffer_t* Buff); /* The buffer whose length to get */
+
+/*
+ * DS_ByteBuffer_sizeof
+ * Returns the number of bytes that make up the structure
+ *  !! This should be used in place of sizeof(DS_ByteBuffer_t)
+ */
+unsigned int DS_ByteBuffer_sizeof(void);
 
 #endif /* DS_BYTEBUFFER_H */

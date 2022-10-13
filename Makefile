@@ -2,7 +2,7 @@
 
 # CC FLAGS
 CC:=gcc
-CC_FLAGS:=-c -std=c99 -Wall -Wextra -Wpedantic -D_DEFAULT_SOURCE
+CC_FLAGS:=-std=c99 -Wall -Wextra -Wpedantic -D_DEFAULT_SOURCE
 CC_LIBS:=-lm
 
 SOURCE_FILES:=$(wildcard src/*.c)
@@ -17,6 +17,10 @@ IDIR:=~/lib
 
 # Make commands
 all: dirs includes app
+
+test: all tests/tests.c
+	@$(CC) $(CC_FLAGS) -Iinclude -Llib tests/tests.c -o \
+    tests/tests -lDataStructures && tests/tests
 
 run: all
 	@[[ -f "lib/$(APP_NAME)" ]] && lib/$(APP_NAME)
@@ -53,9 +57,9 @@ app: $(OBJ_FILES)
 
 build/%.c.o: src/%.c
 	@echo "Building $@"
-	@$(CC) $(CC_FLAGS) $< -o $@ $(CC_LIBS)
+	@$(CC) -c $(CC_FLAGS) $< -o $@ $(CC_LIBS)
 	
 build/%.c.o: src/%.c src/%.h
 	@echo "Building $@"
-	@$(CC) $(CC_FLAGS) $< -o $@ $(CC_LIBS)
+	@$(CC) -c $(CC_FLAGS) $< -o $@ $(CC_LIBS)
 

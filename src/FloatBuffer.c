@@ -1,27 +1,27 @@
 /*
- * ByteBuffer.c
+ * FloatBuffer.c
  *
- * Main file for ByteBuffer
+ * Main file for FloatBuffer
  *
  * ~ RedFox0x20
  */
-#include "ByteBuffer.internal.h"
-#include "ByteBuffer.h"
+#include "FloatBuffer.internal.h"
+#include "FloatBuffer.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-DS_ByteBuffer_t* DS_ByteBuffer_Create(unsigned int Length)
+DS_FloatBuffer_t* DS_FloatBuffer_Create(unsigned int Length)
 {
-    DS_ByteBuffer_t* Buff;
+    DS_FloatBuffer_t* Buff;
 
-    Buff = malloc(sizeof(struct DS_ByteBuffer));
+    Buff = malloc(sizeof(struct DS_FloatBuffer));
     if (Buff == NULL)
     {
         return NULL;
     }
 
-    Buff->Data = calloc(Length, sizeof(unsigned char));
+    Buff->Data = calloc(Length, sizeof(float));
     if (Buff->Data == NULL)
     {
         free(Buff);
@@ -33,7 +33,7 @@ DS_ByteBuffer_t* DS_ByteBuffer_Create(unsigned int Length)
     return Buff;
 }
 
-int DS_ByteBuffer_Destroy(DS_ByteBuffer_t** Buff)
+int DS_FloatBuffer_Destroy(DS_FloatBuffer_t** Buff)
 {
     if (Buff == NULL)
     {
@@ -55,19 +55,19 @@ int DS_ByteBuffer_Destroy(DS_ByteBuffer_t** Buff)
     return 0;
 }
 
-int DS_ByteBuffer_Resize(
-        DS_ByteBuffer_t* Buff,
+int DS_FloatBuffer_Resize(
+        DS_FloatBuffer_t* Buff,
         unsigned int Length,
         unsigned int Clear)
 {
-    unsigned char* Temp;
+    float* Temp;
 
     if (Buff == NULL)
     {
         return -1;
     }
 
-    Temp = reallocarray(Buff->Data, Length, sizeof(unsigned char));
+    Temp = reallocarray(Buff->Data, Length, sizeof(float));
     if (Temp == NULL)
     {
         return -1;
@@ -75,7 +75,7 @@ int DS_ByteBuffer_Resize(
 
     if (Clear != 0)
     {
-        memset(Buff->Data, 0, Length * sizeof(unsigned char));
+        memset(Buff->Data, 0, Length * sizeof(float));
     }
 
     Buff->Data = Temp;
@@ -84,18 +84,17 @@ int DS_ByteBuffer_Resize(
     return Length;
 }
 
-unsigned char* DS_ByteBuffer_GetData(DS_ByteBuffer_t* Buff)
+float* DS_FloatBuffer_GetData(DS_FloatBuffer_t* Buff)
 {
     return Buff->Data;
 }
 
-unsigned int DS_ByteBuffer_GetLength(DS_ByteBuffer_t* Buff)
+unsigned int DS_FloatBuffer_GetLength(DS_FloatBuffer_t* Buff)
 {
     return Buff->Length;
 }
 
-
-unsigned int DS_ByteBuffer_sizeof(void)
+unsigned int DS_FloatBuffer_sizeof(void)
 {
-    return sizeof(DS_ByteBuffer_t);
+    return sizeof(DS_FloatBuffer_t);
 }
