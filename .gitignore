@@ -27,7 +27,6 @@ lib/*
 *.pch
 
 # Development only files
-*.internal.h
 *.env.sh
 
 # Libraries
