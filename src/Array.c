@@ -14,7 +14,8 @@
 
 DS_Array_t* DS_Array_Create(
         unsigned int MemberSize,
-        unsigned int MemberCount)
+        unsigned int MemberCount,
+        int InitValue)
 {
     DS_Array_t* Arr;
     unsigned int BytesUsed;
@@ -34,6 +35,7 @@ DS_Array_t* DS_Array_Create(
         free(Arr);
         return NULL;
     }
+    memset(Arr->Data, (int)InitValue, BytesUsed);
 
 
     Arr->BytesUsed = BytesUsed;
@@ -81,9 +83,11 @@ unsigned int DS_Array_GetLength(
 
 unsigned int DS_Array_Resize(
         DS_Array_t* Arr,
-        unsigned int MemberCount)
+        unsigned int MemberCount,
+        int InitValue)
 {
     unsigned int BytesRequired;
+    unsigned int BytesUsed;
     void* Temp;
 
     if (Arr == NULL) { return 1; }
@@ -91,9 +95,11 @@ unsigned int DS_Array_Resize(
     /* Error condition, should never happen */
     if (Arr->Data == NULL) { return 1; } 
 
+    BytesUsed = MemberCount * Arr->MemberSize;
     BytesRequired = 
-        DS_ARRAY_BLOCK_SIZE_REQUIRED(Arr->MemberSize * MemberCount) 
+        DS_ARRAY_BLOCK_SIZE_REQUIRED(BytesUsed) 
         * DS_ARRAY_BLOCK_SIZE;
+
 
     if (BytesRequired > Arr->BytesAllocated)
     {
@@ -101,10 +107,15 @@ unsigned int DS_Array_Resize(
         if (Temp == NULL) { return 1; }
         Arr->Data = Temp;
     }
+    memset(
+            ((char*)Arr->Data) + Arr->BytesUsed,
+            InitValue,
+            BytesRequired - Arr->BytesUsed);
+
 
     Arr->MemberCount = MemberCount;
     Arr->BytesAllocated = BytesRequired;
-    Arr->BytesUsed = MemberCount * Arr->MemberSize;
+    Arr->BytesUsed = BytesUsed;
 
     return 0;
 }

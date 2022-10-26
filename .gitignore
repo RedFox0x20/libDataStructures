@@ -28,6 +28,7 @@ lib/*
 
 # Development only files
 *.env.sh
+tests/tests
 
 # Libraries
 *.lib

@@ -31,7 +31,8 @@ typedef struct DS_Array DS_Array_t;
  */
 DS_Array_t* DS_Array_Create(
         unsigned int MemberSize,    /* How many bytes each member requires */
-        unsigned int MemberCount);  /* How many members to allocate for    */
+        unsigned int MemberCount,   /* How many members to allocate for    */
+        int InitValue);
 
 /*
  * DS_Array_Destroy
@@ -62,6 +63,7 @@ unsigned int DS_Array_GetLength(
  */
 unsigned int DS_Array_Resize(
         DS_Array_t* Arr,
-        unsigned int MemberCount);
+        unsigned int MemberCount,
+        int InitValue);
 
 #endif /* DS_ARRAY_H */
