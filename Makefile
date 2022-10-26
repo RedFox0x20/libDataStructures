@@ -7,7 +7,7 @@ CC_LIBS:=-lm
 
 SOURCE_FILES:=$(wildcard src/*.c)
 HEADER_FILES:=$(wildcard src/*.h)
-INTERNAL_HEADER_FILES:=$(wildcard src/*.internal.h)
+INTERNAL_HEADER_FILES:=$(wildcard src/*.internal.h) 
 PUBLIC_HEADER_FILES:=$(filter-out $(INTERNAL_HEADER_FILES), $(HEADER_FILES))
 OBJ_FILES:=$(addsuffix .o, $(patsubst src/%,build/%,$(SOURCE_FILES)))
 
@@ -19,11 +19,12 @@ IDIR:=~/lib
 all: dirs includes app
 
 test: all tests/tests.c
-	@$(CC) $(CC_FLAGS) -Iinclude -Llib tests/tests.c -o \
-    tests/tests -lDataStructures && tests/tests
+	$(CC) $(CC_FLAGS) -Iinclude -Lbin tests/tests.c -o \
+	tests/tests -lDataStructures
+	exec tests/tests
 
 run: all
-	@[[ -f "lib/$(APP_NAME)" ]] && lib/$(APP_NAME)
+	@[[ -f "lib/$(APP_NAME)" ]] && bin/$(APP_NAME)
 
 dirs:
 	@mkdir -p bin lib include build $(IDIR) $(IDIR)/include/$(APP_NAME)
@@ -36,7 +37,7 @@ install: all
 	@echo $(PUBLIC_HEADER_FILES)
 	@echo "Installing to $(IDIR)"
 	@echo "Installing headers to $(IDIR)/$(APP_NAME)"
-	@cp lib/$(APP_NAME).a $(IDIR)/$(APP_NAME).a
+	@cp bin/$(APP_NAME).a $(IDIR)/$(APP_NAME).a
 	@cp $(PUBLIC_HEADER_FILES) $(IDIR)/include/$(APP_NAME)/
 
 uninstall:
@@ -53,7 +54,7 @@ includes: $(HEADER_FILES)
 
 app: $(OBJ_FILES)
 	@echo "Building bin/$(APP_NAME).a"
-	@ar rcs lib/$(APP_NAME).a $(OBJ_FILES) 
+	@ar rcs bin/$(APP_NAME).a $(OBJ_FILES) 
 
 build/%.c.o: src/%.c
 	@echo "Building $@"
